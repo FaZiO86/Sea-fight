@@ -1,9 +1,6 @@
 #include <iostream>
 #include "windows.h"
 #include "functions.h"
-#include <iostream>
-#include "windows.h"
-#include "functions.h"
 #include <conio.h>
 #include <time.h>
 #include <ctime>
@@ -437,7 +434,7 @@ void enterCoordinateAuto(char field[10][10]) {
 		}
 	}
 }
-//временное поле
+													//временное поле
 void showMap(char arr1[10][10], char arr2[10][10], char arr3[10][10]) {
 	system("CLS");
 	std::cout << "\n      Ваши корабли  \t        Ваши выстрелы  \n";
