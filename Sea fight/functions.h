@@ -28,10 +28,10 @@ void fireBot(char playerField[10][10], char playerFireField[10][10], char botFie
 void enterCordinate(char playerField[10][10], char playerFireField[10][10], char botField[10][10], int size, int kolvo, int shipId, int ships[10]);
 
 //Проверка игрока на победу
-void checkFieldPlayer(char playerField[10][10], char playerFireField[10][10], char botField[10][10]);
+void checkFieldPlayer(char playerField[10][10], char playerFireField[10][10], char botField[10][10], int shipId, int ships[10]);
 
 //Проверка бота на победу
-void chekFieldBot(char playerField[10][10], char playerFireField[10][10], char botField[10][10]);
+void chekFieldBot(char playerField[10][10], char playerFireField[10][10], char botField[10][10], int shipId, int ships[10]);
 
 //Автомматическая установка корабля
 void enterShipAuto(char field[10][10], int size, int kolvo, int shipId, int ships[10]);

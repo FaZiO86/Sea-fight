@@ -452,7 +452,7 @@ void firePlayer(char playerField[10][10], char playerFireField[10][10], char bot
 			}
 			system("cls");
 			showMap(playerField, playerFireField, botField, shipId, ships);
-			//checkFieldPlayer(playerField, playerFireField, botField);
+			checkFieldPlayer(playerField, playerFireField, botField, shipId, ships);
 			firePlayer(playerField, playerFireField, botField, shipId, ships);
 		}
 		else {
@@ -489,7 +489,7 @@ void fireBot(char playerField[10][10], char playerFireField[10][10], char botFie
 			}
 			system("cls");
 			showMap(playerField, playerFireField, botField, shipId, ships);
-			//chekFieldBot(playerField, playerFireField, botField);
+			chekFieldBot(playerField, playerFireField, botField, shipId, ships);
 			fireBot(playerField, playerFireField, botField, shipId, ships);
 		}
 		if (playerField[y][x] == '.' && (playerField[y][x] != 'X' && playerField[y][x] != '*')) {
