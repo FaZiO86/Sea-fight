@@ -13,7 +13,21 @@
 #define enter 13
 //#define esc 27
 
-void enterShipAuto(char field[10][10], int size, int kolvo, int shipId, int ships[10]) {
+void enterManualCordinate(char playerField[10][10], char playerFireField[10][10], char botField[10][10]) {
+	startMap(playerField, playerFireField, botField);
+	
+	enterShipAuto(botField, 4, 1);
+	enterShipAuto(botField, 3, 2);
+	enterShipAuto(botField, 2, 3);
+	enterShipAuto(botField, 1, 4);
+	
+	enterCordinate(playerField, playerFireField, botField, 4, 1);
+	enterCordinate(playerField, playerFireField, botField, 3, 2);
+	enterCordinate(playerField, playerFireField, botField, 2, 3);
+	enterCordinate(playerField, playerFireField, botField, 1, 4);
+}
+
+void enterShipAuto(char field[10][10], int size, int kolvo) {
 	srand(time(NULL));
 	
 	int countShip = 0, dir = 0, x, y;
@@ -72,45 +86,39 @@ void enterShipAuto(char field[10][10], int size, int kolvo, int shipId, int ship
 				case 3: y--; break;
 				}
 			}
-			
-			//ships[shipId] = size;
-			shipId++;
 			countShip++;
 		}
 	}
 }
 
-void enterCordinateAuto(char playerField[10][10], char playerFireField[10][10], char botField[10][10], int shipId, int ships[10]) {
-	enterShipAuto(playerField, 4, 1, shipId, ships);
-	enterShipAuto(playerField, 3, 2, shipId, ships);
-	enterShipAuto(playerField, 2, 3, shipId, ships);
-	enterShipAuto(playerField, 1, 4, shipId, ships);
+void enterCordinateAuto(char playerField[10][10], char playerFireField[10][10], char botField[10][10]) {
+	enterShipAuto(playerField, 4, 1);
+	enterShipAuto(playerField, 3, 2);
+	enterShipAuto(playerField, 2, 3);
+	enterShipAuto(playerField, 1, 4);
 	Sleep(1500);
-	enterShipAuto(botField, 4, 1, shipId, ships);
-	enterShipAuto(botField, 3, 2, shipId, ships);
-	enterShipAuto(botField, 2, 3, shipId, ships);
-	enterShipAuto(botField, 1, 4, shipId, ships);
+	enterShipAuto(botField, 4, 1);
+	enterShipAuto(botField, 3, 2);
+	enterShipAuto(botField, 2, 3);
+	enterShipAuto(botField, 1, 4);
 }
 
-void enterCordinate(char playerField[10][10], char playerFireField[10][10], char botField[10][10], int size, int kolvo, int shipId, int ships[10]) {	//функция не доделана!!!
-	int y = 0, x = 0, dir = 0, count = 0;
+void enterCordinate(char playerField[10][10], char playerFireField[10][10], char botField[10][10], int size, int kolvo) {	//функция не доделана!!!
+	
+	int y = 0, x = 0, count = 0, dir = 0;
 	char x1;
-	startMap(playerField, playerFireField, botField);
-	enterShipAuto(botField, 4, 1, shipId, ships);
-	enterShipAuto(botField, 3, 2, shipId, ships);
-	enterShipAuto(botField, 2, 3, shipId, ships);
-	enterShipAuto(botField, 1, 4, shipId, ships);
-	showMap(playerField, playerFireField, botField, shipId, ships);
-	for (int i = 1; i <= kolvo; i++) {
+	
+	showMap(playerField, playerFireField, botField);
+	for(int i = 1; i <= kolvo; i++){
 		for (int j = 1; j <= size; j++) {
-			showMap(playerField, playerFireField, botField, shipId, ships);
+			
 			do {
 				y = 0;
 				system("cls");
-				showMap(playerField, playerFireField, botField, shipId, ships);
+				showMap(playerField, playerFireField, botField);
 				try {
 					std::string str;
-					std::cout << "Введите " << j << " координату по вертикали " << i << "-ого " << size << " - палубного корабля: ";
+					std::cout << "Введите " << j << " координату по вертикали " << size << " - палубного корабля: ";
 					std::cin >> str;
 
 					y = stoi(str);
@@ -131,7 +139,7 @@ void enterCordinate(char playerField[10][10], char playerFireField[10][10], char
 			} while (true);
 
 			do {
-				std::cout << "Введите " << j << " координату по горизонтали " << i << "-ого " << size << " - палубного корабля: ";
+				std::cout << "Введите " << j << " координату по горизонтали " << size << " - палубного корабля: ";
 				std::cin >> x1;
 				if (x1 >= 'A' && x1 <= 'J')//от 65 до 74
 					x = (int)(x1 - 64);
@@ -139,7 +147,7 @@ void enterCordinate(char playerField[10][10], char playerFireField[10][10], char
 					if (x1 >= 'a' && x1 <= 'j')//от 97 до 106
 						x = (int)(x1 - 96);
 					else {
-						showMap(playerField, playerFireField, botField, shipId, ships);
+						showMap(playerField, playerFireField, botField);
 						std::cout << "Не корректно введена координата, попробуйте ещё раз!" << std::endl;
 					}
 			} while (x1 != 'a' && x1 != 'A' &&
@@ -152,59 +160,50 @@ void enterCordinate(char playerField[10][10], char playerFireField[10][10], char
 				x1 != 'h' && x1 != 'H' &&
 				x1 != 'i' && x1 != 'I' &&
 				x1 != 'j' && x1 != 'J');
-			
-			if (playerField[y + 1][x] != '#' &&
-				playerField[y + 1][x + 1] != '#' &&
-				playerField[y + 1][x - 1] != '#' &&
-				playerField[y - 1][x - 1] != '#' &&
-				playerField[y - 1][x + 1] != '#' &&
-				playerField[y - 1][x] != '#' &&
-				playerField[y][x - 1] != '#' &&
-				playerField[y][x + 1] != '#' &&
-				playerField[y][x] != '#' /* && dir == 0 */ ) {
-				playerField[y][x] = '#';
-			}
-			else {
-				std::cout << "Сюда ставить нельзя!\n";
-				system("pause");
-				continue;						//цикл запускается заново
-			}
-			/*else if
-				(dir != 0 && (playerField[a + 1][b] == '#' ||
-					playerField[a][b - 1] == '#' ||
-					playerField[a][b + 1] == '#'
-					|| playerField[a - 1][b - 1] == '#') && (playerField[a + 1][b + 1] != '#' || playerField[a + 1][b - 1] != '#' || playerField[a - 1][b + 1] != '#'
-						|| playerField[a - 1][b - 1] != '#')) {
-				int temp = 0;
-				if (playerField[a + 1][b] == '#') temp++;
-				if (playerField[a - 1][b] == '#') temp++;
-				if (playerField[a][b + 1] == '#') temp++;
-				if (playerField[a][b - 1] == '#') temp++;
-				if (temp == 1)	playerField[a][b] = '#';
-			}
-			else std::cout << "Error Check Field, illegal number or field, retry " << std::endl;
-			dir++;
-			if (playerField[a][b] == '#') {
-				std::cout << "Your " << x << "-pointed ship: [" << a << "][" << b << "]" << std::endl;
-				showMap(playerField, playerFireField, botField);
-				if ((dir == x) && (dir != 4)) std::cout << "Good, next ship " << std::endl;
-				else if (dir == 4) std::cout << "Ok, lets play ! " << std::endl;
-				else enterCoordinate(playerField, playerFireField, botField, a, b, size, kolvo);
-			}
-			else {
-				std::cout << "Ошибка ввода, повторите... " << std::endl;
-				kolvo--;
-				enterCoordinate(playerField, playerFireField, botField, size, kolvo);
-			}*/
+			playerField[y][x] = '#';
+			//Первая координата
+			//if (j == 1) {
+			//	if (playerField[y][x] != '#' ||
+			//		playerField[y][x + 1] != '#' ||
+			//		playerField[y][x - 1] != '#' ||
+			//		playerField[y + 1][x] != '#' ||
+			//		playerField[y + 1][x + 1] != '#' ||
+			//		playerField[y + 1][x - 1] != '#' ||
+			//		playerField[y - 1][x] == '#' ||
+			//		playerField[y - 1][x + 1] != '#' ||
+			//		playerField[y - 1][x - 1] != '#') {
+			//		playerField[y][x] = '#';
+			//
+			//	}
+			//	else {
+			//		std::cout << "Тут ставить нельзя!";
+			//		j--;
+			//	}
+			//}
+			//вторая кордината
+			//else 
+			//	if (j == 2 || j == 3 || j == 4) {
+			//		if (playerField[y][x+1] == '#' ||
+			//			playerField[y][x-1] == '#' ||
+			//			playerField[y-1][x] == '#' ||
+			//			playerField[y+1][x] == '#' ||
+			//			playerField[y + 1][x + 1] !='#' ||
+			//			playerField[y + 1][x - 1] != '#' ||
+			//			playerField[y - 1][x + 1] != '#' ||
+			//			playerField[y - 1][x - 1] != '#'||
+			//			playerField[y][x] != '#') {
+			//			playerField[y][x] = '#';
+			//		}
+			//	else {
+			//		std::cout << "Тут ставить нельзя!";
+			//		j--;
+			//	}
+			//}
 		}
-		showMap(playerField, playerFireField, botField, shipId, ships);
-		count++;
-		if (kolvo == count)
-			manualMenu(playerField, playerFireField, botField, shipId, ships);
 	}
 }
 
-void mainMenu(char playerField[10][10], char playerFireField[10][10], char botField[10][10], int shipId, int ships[10]) {
+void mainMenu(char playerField[10][10], char playerFireField[10][10], char botField[10][10]) {
 	std::string menu[] = { "Автоматическая расстановка кораблей", "Ручная расстановка кораблей", "Играть", "Выход" };
 	GoToXY(50, 11);
 	std::cout << "Главное меню";
@@ -235,9 +234,8 @@ void mainMenu(char playerField[10][10], char playerFireField[10][10], char botFi
 				system("cls");
 				GoToXY(x, y);
 				startMap(playerField, playerFireField, botField);
-				
 				std::cout << "Ваши корабли расставлены!";
-				enterCordinateAuto(playerField, playerFireField, botField, shipId, ships);
+				enterCordinateAuto(playerField, playerFireField, botField);
 				system("cls");
 				GoToXY(x, y);
 				std::cout << "Ждём расстановку бота!";
@@ -249,7 +247,8 @@ void mainMenu(char playerField[10][10], char playerFireField[10][10], char botFi
 				system("cls");
 				break;
 			case 1:
-				manualMenu(playerField, playerFireField, botField, shipId, ships);
+				enterManualCordinate( playerField, playerFireField, botField);
+				//manualMenu(playerField, playerFireField, botField);
 				ch = _getch();
 				system("cls");
 				break;
@@ -259,8 +258,8 @@ void mainMenu(char playerField[10][10], char playerFireField[10][10], char botFi
 				GoToXY(x, y);
 				a = rand() % 2;
 				switch (a) {
-				case 0: std::cout << "Вы ходите первым!\n\t\t\t\t\t\t"; system("pause"); firePlayer(playerField, playerFireField, botField, shipId, ships); break;
-				case 1:	std::cout << "Бот ходит первым!\n\t\t\t\t\t\t"; system("pause"); fireBot(playerField, playerFireField, botField, shipId, ships); break;
+				case 0: std::cout << "Вы ходите первым!\n\t\t\t\t\t\t"; system("pause"); firePlayer(playerField, playerFireField, botField); break;
+				case 1:	std::cout << "Бот ходит первым!\n\t\t\t\t\t\t"; system("pause"); fireBot(playerField, playerFireField, botField); break;
 				}		//требуется условие, если игрок не заполнил своё поле кораблями...
 				ch = _getch();
 				system("cls");
@@ -272,7 +271,7 @@ void mainMenu(char playerField[10][10], char playerFireField[10][10], char botFi
 	}
 }
 
-void manualMenu(char playerField[10][10], char playerFireField[10][10], char botField[10][10], int shipId, int ships[10]) {
+/*void manualMenu(char playerField[10][10], char playerFireField[10][10], char botField[10][10]) {
 	int active_menu = 0;
 	char ch;
 	std::string manualMenu[] = { "Один четырёхпалубный", "два трёхпалубных", "три двухпалубных", "четыре однопалубных", "возврат в главное меню" };
@@ -299,17 +298,17 @@ void manualMenu(char playerField[10][10], char playerFireField[10][10], char bot
 		case down: if (active_menu < size(manualMenu) - 1) active_menu++; break;
 		case enter:
 			switch (active_menu) {
-			case 0:enterCordinate(playerField, playerFireField, botField, 4,1, shipId, ships); ch = _getch(); break;
-			case 1:enterCordinate(playerField, playerFireField, botField, 3,2, shipId, ships); ch = _getch(); break;
-			case 2:enterCordinate(playerField, playerFireField, botField, 2,3, shipId, ships); ch = _getch(); break;
-			case 3:enterCordinate(playerField, playerFireField, botField, 1,4, shipId, ships); ch = _getch(); break;
-			case 4: system("cls"); mainMenu(playerField, playerFireField, botField,shipId,ships); break;
+			case 0:enterCordinate(playerField, playerFireField, botField, 4,1); ch = _getch(); break;
+			case 1:enterCordinate(playerField, playerFireField, botField, 3,2); ch = _getch(); break;
+			case 2:enterCordinate(playerField, playerFireField, botField, 2,3); ch = _getch(); break;
+			case 3:enterCordinate(playerField, playerFireField, botField, 1,4); ch = _getch(); break;
+			case 4: system("cls"); mainMenu(playerField, playerFireField, botField); break;
 			}
 		}
 	}
-}
+}*/
 													//временное поле
-void showMap(char playerField[10][10], char playerFireField[10][10], char botField[10][10], int shipId, int ships[10]) {
+void showMap(char playerField[10][10], char playerFireField[10][10], char botField[10][10]) {
 	system("CLS");
 	std::cout << "\n      Ваши корабли  \t        Ваши выстрелы  \n";
 	std::cout << "\n   A B C D E F G H I J \t     A B C D E F G H I J\n";
@@ -338,13 +337,6 @@ void showMap(char playerField[10][10], char playerFireField[10][10], char botFie
 	}
 	std::cout << "  ---------------------     ---------------------" << std::endl;
 
-	//GoToXY(80, 1);
-	//std::cout << "Корабли:\n";
-	for (int i = 0; i < 10; i++) {
-		//GoToXY(80, 2);
-		std::cout << i << " " << ships[i] << std::endl;
-	}
-
 	//Временное поле для Бота
 
 	//std::cout << "Временное поле бота!\n";
@@ -371,16 +363,16 @@ void startMap(char playerField[10][10], char playerFireField[10][10], char botFi
 	}
 }
 
-void firePlayer(char playerField[10][10], char playerFireField[10][10], char botField[10][10], int shipId, int ships[10]) {
+void firePlayer(char playerField[10][10], char playerFireField[10][10], char botField[10][10]) {
 	while (true) {
-		showMap(playerField, playerFireField, botField, shipId, ships);
+		showMap(playerField, playerFireField, botField);
 		int y, x;
 		char x1;
 
 		do {
 			y = 0;
 			system("cls");
-			showMap(playerField, playerFireField, botField, shipId, ships);
+			showMap(playerField, playerFireField, botField);
 			try {
 				std::string str;
 				std::cout << "Введите координату по вертикали цифрой: " << std::endl;
@@ -404,7 +396,7 @@ void firePlayer(char playerField[10][10], char playerFireField[10][10], char bot
 		} while (true);
 		
 		system("cls");
-		showMap(playerField, playerFireField, botField, shipId, ships);
+		showMap(playerField, playerFireField, botField);
 		do {
 			std::cout << "Введите  координату выстрела по горизонтали буквой: " << std::endl;
 			std::cin >> x1;
@@ -414,7 +406,7 @@ void firePlayer(char playerField[10][10], char playerFireField[10][10], char bot
 				if (x1 >= 'a' && x1 <= 'j')//от 97 до 106
 					x = (int)(x1 - 96);
 				else {
-					showMap(playerField, playerFireField, botField, shipId, ships);
+					showMap(playerField, playerFireField, botField);
 					std::cout << "Не корректно введена координата, попробуйте ещё раз!" << std::endl;
 				}
 		} while (x1 != 'a' && x1 != 'A' &&
@@ -451,9 +443,9 @@ void firePlayer(char playerField[10][10], char playerFireField[10][10], char bot
 				system("pause");
 			}
 			system("cls");
-			showMap(playerField, playerFireField, botField, shipId, ships);
-			checkFieldPlayer(playerField, playerFireField, botField, shipId, ships);
-			firePlayer(playerField, playerFireField, botField, shipId, ships);
+			showMap(playerField, playerFireField, botField);
+			checkFieldPlayer(playerField, playerFireField, botField);
+			firePlayer(playerField, playerFireField, botField);
 		}
 		else {
 			playerFireField[y][x] = '*';
@@ -462,14 +454,14 @@ void firePlayer(char playerField[10][10], char playerFireField[10][10], char bot
 			std::cout << "Вы промахнулись!" << std::endl;
 			GoToXY(50, 13);
 			system("pause");
-			fireBot(playerField, playerFireField, botField, shipId, ships);		//переход хода
+			fireBot(playerField, playerFireField, botField);		//переход хода
 		}
 
 	}
 }//функция
 
-void fireBot(char playerField[10][10], char playerFireField[10][10], char botField[10][10], int shipId, int ships[10]) {
-	showMap(playerField, playerFireField, botField, shipId, ships);
+void fireBot(char playerField[10][10], char playerFireField[10][10], char botField[10][10]) {
+	showMap(playerField, playerFireField, botField);
 	while (true) {
 		int y = rand() % (11 - 1) + 1;
 		int x = rand() % (11 - 1) + 1;
@@ -481,16 +473,16 @@ void fireBot(char playerField[10][10], char playerFireField[10][10], char botFie
 			system("pause");//Sleep(1000);
 			if (playerField[y - 1][x] != '#' && playerField[y + 1][x] != '#' && playerField[y][x - 1] != '#' && playerField[y][x + 1] != '#') {
 				system("cls");
-				showMap(playerField, playerFireField, botField, shipId, ships);
+				showMap(playerField, playerFireField, botField);
 				GoToXY(50, 11);
 				std::cout << "Бот потопил ваш корабль!" << std::endl;
 				GoToXY(50, 13);
 				system("pause");//Sleep(1000);
 			}
 			system("cls");
-			showMap(playerField, playerFireField, botField, shipId, ships);
-			chekFieldBot(playerField, playerFireField, botField, shipId, ships);
-			fireBot(playerField, playerFireField, botField, shipId, ships);
+			showMap(playerField, playerFireField, botField);
+			chekFieldBot(playerField, playerFireField, botField);
+			fireBot(playerField, playerFireField, botField);
 		}
 		if (playerField[y][x] == '.' && (playerField[y][x] != 'X' && playerField[y][x] != '*')) {
 			playerField[y][x] = '*';
@@ -498,12 +490,12 @@ void fireBot(char playerField[10][10], char playerFireField[10][10], char botFie
 			std::cout << "Бот промахнулся!" << y << " " << x << std::endl;		//Временно
 			GoToXY(50, 13);
 			system("pause");//Sleep(1000);
-			firePlayer(playerField, playerFireField, botField, shipId, ships);		//переход хода
+			firePlayer(playerField, playerFireField, botField);		//переход хода
 		}
 	}
 }
 
-void checkFieldPlayer(char playerField[10][10], char playerFireField[10][10], char botField[10][10], int shipId, int ships[10]) {
+void checkFieldPlayer(char playerField[10][10], char playerFireField[10][10], char botField[10][10]) {
 	int temp = 0;
 	for (int i = 1; i <= 10; i++)
 	{
@@ -518,11 +510,11 @@ void checkFieldPlayer(char playerField[10][10], char playerFireField[10][10], ch
 		system("pause");
 		system("cls");
 		startMap(playerField, playerFireField, botField);		//очистка полей
-		mainMenu(playerField, playerFireField, botField, shipId, ships);
+		mainMenu(playerField, playerFireField, botField);
 	}
 }
 
-void chekFieldBot(char playerField[10][10], char playerFireField[10][10], char botField[10][10], int shipId, int ships[10]) {
+void chekFieldBot(char playerField[10][10], char playerFireField[10][10], char botField[10][10]) {
 	int temp = 0;
 	for (int i = 1; i <= 10; i++)
 	{
@@ -537,7 +529,7 @@ void chekFieldBot(char playerField[10][10], char playerFireField[10][10], char b
 		system("pause");
 		system("cls");
 		startMap(playerField, playerFireField, botField);//очистка полей
-		mainMenu(playerField, playerFireField, botField, shipId, ships);
+		mainMenu(playerField, playerFireField, botField);
 	}
 }
 
